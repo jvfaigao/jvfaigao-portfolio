@@ -16,9 +16,9 @@ const projects = defineCollection({
       year: z.string(),
       stack: z.array(z.string()),
       meta: z.string(),
-      liveUrl: z.string().url().optional(),
+      liveUrl: z.url().optional(),
       liveLabel: z.string().default('Visit site'),
-      repoUrl: z.string().url().optional(),
+      repoUrl: z.url().optional(),
       result: z.object({ headline: z.string(), line: z.string() }).optional(),
       quote: z.object({ text: z.string(), by: z.string() }).optional(),
       // CSS wireframe thumbnail from the design canvas; swap for real images later.

@@ -21,7 +21,7 @@ const view =
         ? { title: 'Too many messages', text: 'Please wait a few minutes before sending another message, or email me directly.' }
         : { title: "Couldn't send your message", text: 'Something went wrong on my side. Please email me directly.' };
 ---
-<Base title={`${view.title} · JV Faigao`} description="Contact form result." navActive="contact">
+<Base title={`${view.title} · JV Faigao`} description="Result of sending a message through the contact form." navActive="contact" noindex>
   <main class="wrap" style="padding-top: 64px; padding-bottom: 120px">
     <h1 class="disp" style="margin: 0 0 24px; font-size: clamp(52px, 8vw, 96px); line-height: .9">{view.title}</h1>
     <p style="margin: 0; font-size: 19px; max-width: 52ch">{view.text}</p>

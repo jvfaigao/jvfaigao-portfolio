@@ -6,6 +6,6 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://jvfaigao-portfolio.vercel.app',
   adapter: vercel(),
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes('/contact-result') })],
   devToolbar: { enabled: false },
 });
