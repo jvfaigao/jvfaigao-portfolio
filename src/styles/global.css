@@ -176,6 +176,11 @@ html[data-theme='dark'] .ico-moon, html[data-theme='light'] .ico-sun { display: 
 .pp li { margin: 0 0 8px; }
 .pp li::marker { color: var(--red); }
 .pp h2 { margin: 0 0 14px; font-size: 22px; font-weight: 600; }
+/* Markdown body: "The problem" and "What I built" side by side, as on the canvas. */
+.pp-body { display: grid; grid-template-columns: minmax(0, 9fr) minmax(0, 11fr); grid-template-rows: auto auto; grid-auto-flow: column; gap: 0 64px; align-items: start; }
+.pp-body p { margin: 0 0 40px; max-width: 52ch; }
+.pp-body ul { max-width: 60ch; }
+@media (max-width: 820px) { .pp-body { display: block; } }
 .diag-wide { display: block; overflow-x: auto; padding-bottom: 8px; }
 .diag-narrow { display: none; flex-direction: column; max-width: 420px; }
 .ncard { padding: 12px 14px; text-align: center; font-size: 15px; line-height: 1.35; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }

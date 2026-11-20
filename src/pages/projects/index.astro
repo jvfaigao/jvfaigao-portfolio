@@ -1,6 +1,35 @@
 ---
 import Base from '../../layouts/Base.astro';
+import ProjectRow from '../../components/projects/ProjectRow.astro';
+import CtaBand from '../../components/projects/CtaBand.astro';
+import { getGroupedProjects } from '../../lib/projects';
+
+const { production, other } = await getGroupedProjects();
+const groups = [
+  { title: 'In production', items: production, pad: 72 },
+  { title: 'Other work', items: other, pad: 96 },
+];
 ---
-<Base title="Projects · JV Faigao" description="Systems I've built for real organizations, plus a few for competitions and school." navActive="projects">
-  <main id="top"></main>
+<Base
+  title="Projects · JV Faigao"
+  description="Systems I've built for real organizations, plus a few for competitions and school."
+  navActive="projects"
+>
+  <main>
+    <div class="wrap">
+      <section style="padding: 56px 0 64px">
+        <h1 class="disp" style="margin: 0; font-size: clamp(88px, 14vw, 200px); line-height: .82; color: var(--red)">PROJECTS</h1>
+        <p style="margin: 24px 0 0; font-size: 19px; max-width: 48ch">Systems I've built for real organizations, plus a few for competitions and school.</p>
+      </section>
+      {groups.map((g) => (
+        <section class="group" style={`padding-bottom: ${g.pad}px`}>
+          <h2 class="group-h">{g.title}</h2>
+          <div style="border-bottom: 1px solid var(--line)">
+            {g.items.map((p) => <ProjectRow project={p} />)}
+          </div>
+        </section>
+      ))}
+    </div>
+    <CtaBand />
+  </main>
 </Base>

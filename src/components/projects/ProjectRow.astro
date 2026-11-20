@@ -1,0 +1,30 @@
+---
+import Icon from '../Icon.astro';
+import Thumb from './Thumb.astro';
+import StatusLabel from './StatusLabel.astro';
+import type { Project } from '../../lib/projects';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const d = project.data;
+---
+<div class="row">
+  <Thumb variant={d.thumb} />
+  <div>
+    <a href={`/projects/${project.id}`} class="rname" style={`view-transition-name: p-${project.id}`}>{d.name}</a>
+    <div class="rsum">{d.summary}</div>
+  </div>
+  <div class="rmeta">
+    <StatusLabel status={d.status} />
+    <div style="color: var(--muted)">{d.meta}</div>
+    {d.liveUrl && (
+      <a href={d.liveUrl} class="tlink ext" style="margin-top: 4px">Visit site <Icon name="arrow" size={11} stroke={2.2} /></a>
+    )}
+    {!d.liveUrl && d.repoUrl && (
+      <a href={d.repoUrl} class="tlink ext" style="margin-top: 4px">View code <Icon name="arrow" size={11} stroke={2.2} /></a>
+    )}
+  </div>
+</div>
