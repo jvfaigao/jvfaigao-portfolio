@@ -74,6 +74,12 @@ describe('sendMail', () => {
     expect(body.text).toContain('Hello JV');
   });
 
+  it('keeps line breaks in the name out of the subject', async () => {
+    const fetchFn = vi.fn().mockResolvedValue(new Response('{}', { status: 200 }));
+    await sendMail({ ...data, name: 'Ana\r\nBcc: x@evil.test' }, { apiKey: 'k', fetchFn });
+    expect(JSON.parse(fetchFn.mock.calls[0][1].body).subject).toBe('Portfolio message from Ana Bcc: x@evil.test');
+  });
+
   it('returns false on a non-2xx response or a network error', async () => {
     expect(await sendMail(data, { apiKey: 'k', fetchFn: vi.fn().mockResolvedValue(new Response('', { status: 500 })) })).toBe(false);
     expect(await sendMail(data, { apiKey: 'k', fetchFn: vi.fn().mockRejectedValue(new Error('down')) })).toBe(false);

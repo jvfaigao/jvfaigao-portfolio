@@ -67,7 +67,7 @@ export async function sendMail(data: ContactData, { apiKey, fetchFn = fetch, dry
         from: 'Portfolio <onboarding@resend.dev>',
         to: [CONTACT_EMAIL],
         reply_to: data.email,
-        subject: `Portfolio message from ${data.name}`,
+        subject: `Portfolio message from ${data.name.replace(/[\r\n]+/g, ' ')}`,
         text: `From: ${data.name} <${data.email}>\n\n${data.message}`,
       }),
     });
