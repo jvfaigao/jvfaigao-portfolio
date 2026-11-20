@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../lib/contact';
+
+export const prerender = false;
+
+const status = Astro.url.searchParams.get('status');
+const fields = (Astro.url.searchParams.get('fields') ?? '').split(',');
+const FIELD_TEXT: Record<string, string> = {
+  name: 'Enter your name',
+  email: 'Enter a valid email',
+  message: 'Write at least 10 characters (2,000 at most)',
+};
+
+const view =
+  status === 'sent'
+    ? { title: 'Message sent', text: "Thanks for reaching out. I'll reply to your email soon." }
+    : status === 'invalid'
+      ? { title: 'Please check your message', text: 'Some fields need fixing:' }
+      : status === 'limited'
+        ? { title: 'Too many messages', text: 'Please wait a few minutes before sending another message, or email me directly.' }
+        : { title: "Couldn't send your message", text: 'Something went wrong on my side. Please email me directly.' };
+---
+<Base title={`${view.title} · JV Faigao`} description="Contact form result." navActive="contact">
+  <main class="wrap" style="padding-top: 64px; padding-bottom: 120px">
+    <h1 class="disp" style="margin: 0 0 24px; font-size: clamp(52px, 8vw, 96px); line-height: .9">{view.title}</h1>
+    <p style="margin: 0; font-size: 19px; max-width: 52ch">{view.text}</p>
+    {status === 'invalid' && (
+      <ul style="margin: 16px 0 0; padding-left: 20px">
+        {fields.filter((f) => FIELD_TEXT[f]).map((f) => <li>{FIELD_TEXT[f]}</li>)}
+      </ul>
+    )}
+    <p style="margin: 24px 0 0">Email: <a class="tlink" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+    <p style="margin: 32px 0 0"><a class="btn-red pill-red" href="/#contact">Back to the form</a></p>
+  </main>
+</Base>

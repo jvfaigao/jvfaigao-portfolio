@@ -23,3 +23,60 @@
     <span role="status" class="form-status" style="font-size: 15px; font-weight: 500"></span>
   </div>
 </form>
+
+<script>
+  import { CONTACT_EMAIL, validateContact, type ContactErrors } from '../lib/contact';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const fallback = `Couldn't send your message. Please email me at ${CONTACT_EMAIL}.`;
+
+    const showErrors = (errors: ContactErrors) => {
+      for (const field of ['name', 'email', 'message'] as const) {
+        const input = form.elements.namedItem(field) as HTMLInputElement;
+        const msg = errors[field] ?? '';
+        form.querySelector(`#err-${field}`)!.textContent = msg;
+        if (msg) input.setAttribute('aria-invalid', 'true');
+        else input.removeAttribute('aria-invalid');
+      }
+      const first = (['name', 'email', 'message'] as const).find((f) => errors[f]);
+      if (first) (form.elements.namedItem(first) as HTMLElement).focus();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = Object.fromEntries(new FormData(form));
+      const check = validateContact(input);
+      showErrors(check.ok ? {} : check.errors);
+      if (!check.ok && !check.spam) return;
+
+      status.textContent = 'Sending…';
+      button.disabled = true;
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(input),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok) {
+          form.reset();
+          status.textContent = "Message sent. I'll reply to your email soon.";
+        } else if (res.status === 400 && body.errors) {
+          showErrors(body.errors);
+          status.textContent = '';
+        } else if (res.status === 429) {
+          status.textContent = `Too many messages. Please wait a few minutes or email me at ${CONTACT_EMAIL}.`;
+        } else {
+          status.textContent = fallback;
+        }
+      } catch {
+        status.textContent = fallback;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>
