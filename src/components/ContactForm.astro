@@ -1,0 +1,25 @@
+<form class="cform" method="post" action="/api/contact" novalidate data-contact-form>
+  <div>
+    <label for="cname">Name</label>
+    <input id="cname" name="name" type="text" autocomplete="name" maxlength="80" class="field" aria-describedby="err-name" />
+    <div id="err-name" class="ferr" aria-live="polite"></div>
+  </div>
+  <div>
+    <label for="cemail">Email</label>
+    <input id="cemail" name="email" type="email" autocomplete="email" class="field" aria-describedby="err-email" />
+    <div id="err-email" class="ferr" aria-live="polite"></div>
+  </div>
+  <div>
+    <label for="cmsg">Message</label>
+    <textarea id="cmsg" name="message" rows="5" maxlength="2000" class="field" style="resize: vertical" aria-describedby="err-message"></textarea>
+    <div id="err-message" class="ferr" aria-live="polite"></div>
+  </div>
+  <div class="hp" aria-hidden="true">
+    <label for="cweb">Website</label>
+    <input id="cweb" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+    <button type="submit" class="btn-black">Send message</button>
+    <span role="status" class="form-status" style="font-size: 15px; font-weight: 500"></span>
+  </div>
+</form>

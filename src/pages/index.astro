@@ -1,6 +1,25 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import HowIWork from '../components/home/HowIWork.astro';
+import Testimonial from '../components/home/Testimonial.astro';
+import TechStack from '../components/home/TechStack.astro';
+import About from '../components/home/About.astro';
+import BeyondCode from '../components/home/BeyondCode.astro';
+import WorkTogether from '../components/home/WorkTogether.astro';
 ---
-<Base title="JV Faigao, Web Developer" description="Computer Engineering student who builds complete systems that real people use every day." navActive="home">
-  <main id="top"></main>
+<Base
+  title="JV Faigao, Web Developer"
+  description="Computer Engineering student who builds complete systems that real people use every day. 4 systems in production."
+  navActive="home"
+>
+  <main>
+    <Hero />
+    <HowIWork />
+    <Testimonial />
+    <TechStack />
+    <About />
+    <BeyondCode />
+    <WorkTogether />
+  </main>
 </Base>

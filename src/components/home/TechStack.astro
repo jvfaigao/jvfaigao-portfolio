@@ -1,0 +1,23 @@
+---
+import Icon, { type IconName } from '../Icon.astro';
+import BrandIcon from '../BrandIcon.astro';
+import stack from '../../data/stack.json';
+---
+<section id="stack" class="sec">
+  <div class="wrap">
+    <h2 class="disp h-disp">TECH STACK</h2>
+    <div class="stack">
+      {stack.map((group) => (
+        <div>
+          <span class="cat-ico" aria-hidden="true"><Icon name={group.icon as IconName} /></span>
+          <h3>{group.title}</h3>
+          <ul>
+            {group.items.map((item) => (
+              <li>{'icon' in item && item.icon && <BrandIcon slug={item.icon} class="" />}{item.label}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
