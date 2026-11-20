@@ -1,0 +1,13 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import BrandIcon from './BrandIcon.astro';
+---
+<footer class="wrap foot">
+  <span class="foot-brand"><Logo width={28} />© {new Date().getFullYear()} John Vincent G. Faigao</span>
+  <span class="foot-links">
+    <a class="navlink" href="mailto:faigaojv027@gmail.com">faigaojv027@gmail.com</a>
+    <a class="navlink ext" href="https://github.com/jvfaigao"><BrandIcon slug="github" />GitHub <Icon name="arrow" size={12} stroke={2.2} /></a>
+    <a class="navlink ext" href="https://www.linkedin.com/in/john-vincent-faigao-68a93744a">LinkedIn <Icon name="arrow" size={12} stroke={2.2} /></a>
+  </span>
+</footer>

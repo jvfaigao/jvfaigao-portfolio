@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+---
+<button type="button" class="theme-btn" data-theme-toggle aria-label="Switch to light theme">
+  <Icon name="sun" size={18} class="ico-sun" />
+  <Icon name="moon" size={18} class="ico-moon" />
+</button>
+
+<script>
+  import { storeTheme, type Theme } from '../lib/theme';
+
+  const root = document.documentElement;
+  const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+
+  function label(theme: Theme) {
+    btn?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  }
+
+  label(root.dataset.theme === 'light' ? 'light' : 'dark');
+  btn?.addEventListener('click', () => {
+    const next: Theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+    root.dataset.theme = next;
+    label(next);
+    storeTheme(next);
+  });
+</script>

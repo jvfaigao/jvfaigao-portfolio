@@ -1,0 +1,31 @@
+---
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import type { NavKey } from '../lib/activeSection';
+
+interface Props {
+  active: NavKey;
+}
+
+const { active } = Astro.props;
+const onHome = Astro.url.pathname === '/';
+---
+<div class="wrap">
+  <header class="site-header">
+    <a href={onHome ? '#top' : '/'} class="brand" aria-label="JV Faigao, home">
+      <Logo width={36} />
+      <span>JV Faigao</span>
+    </a>
+    <nav aria-label="Main" class="main-nav">
+      <span class="nav-links">
+        <a class="navlink" href="/projects" aria-current={active === 'projects' ? 'page' : undefined}>Projects</a>
+        <a class="navlink" href={onHome ? '#about' : '/#about'}>About</a>
+        <a class="navlink" href={onHome ? '#contact' : '/#contact'}>Contact</a>
+      </span>
+      <span class="nav-tools">
+        <a class="cv-pill pill-out" href="/JV-Faigao-CV.pdf" download>Download CV</a>
+        <ThemeToggle />
+      </span>
+    </nav>
+  </header>
+</div>

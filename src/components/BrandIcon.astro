@@ -1,0 +1,17 @@
+---
+// Monochrome brand logo from simple-icons, looked up by slug.
+import * as icons from 'simple-icons';
+
+interface Props {
+  slug: string;
+  class?: string;
+}
+
+const { slug, class: className = 'brand-ico' } = Astro.props;
+const icon = Object.values(icons).find((i) => typeof i === 'object' && 'slug' in i && i.slug === slug) as
+  | { path: string; title: string }
+  | undefined;
+---
+{icon && (
+  <svg class={className} aria-hidden="true" viewBox="0 0 24 24"><path d={icon.path} /></svg>
+)}

@@ -1,0 +1,69 @@
+---
+import Icon from './Icon.astro';
+import type { NavKey } from '../lib/activeSection';
+
+interface Props {
+  active: NavKey;
+}
+
+const { active } = Astro.props;
+const onHome = Astro.url.pathname === '/';
+const items: { key: NavKey; label: string; href: string }[] = [
+  { key: 'home', label: 'Home', href: onHome ? '#top' : '/' },
+  { key: 'projects', label: 'Projects', href: '/projects' },
+  { key: 'about', label: 'About', href: onHome ? '#about' : '/#about' },
+  { key: 'contact', label: 'Contact', href: onHome ? '#contact' : '/#contact' },
+];
+---
+<nav class="bnav" aria-label="Bottom" data-active={active} data-home={onHome ? '' : undefined}>
+  <div class="bnav-bar">
+    <span class="bnav-notch bnav-pos" aria-hidden="true"></span>
+    <span class="bnav-bubble bnav-pos" aria-hidden="true">
+      {items.map((i) => <span class={`bico bico-${i.key}`}><Icon name={i.key} /></span>)}
+    </span>
+    {items.map((i) => (
+      <a href={i.href} class:list={['bnav-item', { on: i.key === active }]} data-key={i.key} aria-current={i.key === active ? 'page' : undefined}>
+        <span class="bnav-ico"><Icon name={i.key} /></span>
+        <span>{i.label}</span>
+      </a>
+    ))}
+  </div>
+</nav>
+
+<script>
+  import { sectionToNav, type NavKey } from '../lib/activeSection';
+
+  const nav = document.querySelector<HTMLElement>('.bnav');
+  if (nav) {
+    const setActive = (key: NavKey) => {
+      nav.dataset.active = key;
+      nav.querySelectorAll<HTMLAnchorElement>('.bnav-item').forEach((a) => {
+        const on = a.dataset.key === key;
+        a.classList.toggle('on', on);
+        if (on) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+    };
+
+    nav.querySelectorAll<HTMLAnchorElement>('.bnav-item').forEach((a) => {
+      a.addEventListener('click', () => setActive(a.dataset.key as NavKey));
+    });
+
+    // On Home the bubble also follows the section in view.
+    if (nav.hasAttribute('data-home') && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            const key = e.isIntersecting ? sectionToNav(e.target.id) : null;
+            if (key) setActive(key);
+          }
+        },
+        { rootMargin: '-45% 0px -50% 0px' },
+      );
+      ['top', 'how', 'words', 'stack', 'about', 'personal', 'contact'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) io.observe(el);
+      });
+    }
+  }
+</script>
