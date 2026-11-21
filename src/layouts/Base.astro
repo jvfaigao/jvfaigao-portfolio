@@ -57,5 +57,45 @@ const ogUrl = new URL(ogImage, Astro.site);
     <slot />
     <Footer />
     <BottomNav active={navActive} />
+    <script is:inline>
+      // Text reveal. Inline at the end of <body> so it runs before the first paint: no flash of text that then hides.
+      // Every heading, paragraph, bullet and card in <main> rises in when it scrolls into view.
+      // Skipped: the hero (CSS load animation), the contact form, the footer and the diagrams (they draw in themselves).
+      (function () {
+        if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var root = document.documentElement;
+        root.classList.add('rv');
+        var SEL = [
+          'main h1', 'main h2', 'main h3', 'main p', 'main li', 'main blockquote', 'main figcaption',
+          '.quote-mark', '.step-num', '.cat-ico', '.inst span', '.social', '.btn-white-out', '#about .two > div:last-child > div > div',
+          '.row > *', '.cta-band .wrap > div', '.pp > a.tlink', '.result > *', '.demo', '.shot', '.pp .sec > div:last-child:not(.shots)',
+        ].join(',');
+        var SKIP = '#top, .cform, footer, .diag-wide, .diag-narrow, .social *';
+        var items = [];
+        document.querySelectorAll(SEL).forEach(function (el) {
+          if (el.closest(SKIP) || (el.parentElement && el.parentElement.closest('.rv-item'))) return;
+          el.classList.add('rv-item');
+          items.push(el);
+        });
+        var io = new IntersectionObserver(function (entries) {
+          var n = 0;
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            // Things that enter together come in one after another.
+            e.target.style.transitionDelay = Math.min(n++, 8) * 80 + 'ms';
+            e.target.classList.add('rv-in');
+            io.unobserve(e.target);
+          });
+        }, { rootMargin: '0px 0px -6% 0px' });
+        root.classList.add('rv-ready');
+        // Turn transitions on only after the hidden state has painted; Safari would otherwise fade the text OUT first.
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            root.classList.add('rv-armed');
+            items.forEach(function (el) { io.observe(el); });
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

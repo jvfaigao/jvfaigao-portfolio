@@ -9,7 +9,11 @@ export default defineConfig({
   fullyParallel: true,
   retries: 0,
   use: { baseURL: external ?? 'http://localhost:4329' },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    // Safari behaves differently for motion (it once faded text out instead of in), so the reveal runs on WebKit too.
+    { name: 'iphone', use: { ...devices['iPhone 13'] }, testMatch: /reveal\.spec\.ts/ },
+  ],
   webServer: external ? undefined : {
     // shortcut: dev server, because the Vercel adapter has no `astro preview`; Lighthouse runs on the Vercel preview instead.
     command: 'npx astro dev --port 4329',
