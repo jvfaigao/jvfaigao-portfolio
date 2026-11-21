@@ -79,3 +79,35 @@ test('CV download works', async ({ request }) => {
   expect(res.status()).toBe(200);
   expect(res.headers()['content-type']).toContain('pdf');
 });
+
+test.describe('FaceAttend recognition', () => {
+  test('shows the awarding photo and the certificate, each opening full size', async ({ page, request }) => {
+    await page.goto('/projects/faceattend');
+    const section = page.locator('#recognition');
+    await expect(section.getByRole('heading', { name: 'Recognition' })).toBeVisible();
+    const links = section.locator('a.shot');
+    await expect(links).toHaveCount(2);
+    for (const a of await links.all()) {
+      expect((await a.locator('img').getAttribute('alt'))?.length).toBeGreaterThan(20);
+      expect((await request.get((await a.getAttribute('href'))!)).status()).toBe(200);
+    }
+    await expect(section.locator('figcaption')).toHaveCount(2);
+  });
+
+  test('FaceAttend credits the team, not a solo developer', async ({ page }) => {
+    await page.goto('/projects/faceattend');
+    await expect(page.locator('.pp-meta')).toContainText('Developer, team of 2');
+    await expect(page.locator('.pp-meta')).not.toContainText('Solo');
+    await expect(page.getByRole('heading', { name: 'What we built' })).toBeVisible();
+  });
+
+  test('other projects have no recognition section', async ({ page }) => {
+    await page.goto('/projects/marami-cafe');
+    await expect(page.locator('#recognition')).toHaveCount(0);
+  });
+
+  test('About links the champion certificate', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#about').getByRole('link', { name: 'Certificate' }).first()).toHaveAttribute('href', '/projects/faceattend#recognition');
+  });
+});
