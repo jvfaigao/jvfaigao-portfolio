@@ -35,8 +35,14 @@ const items: { key: NavKey; label: string; href: string }[] = [
 
   const nav = document.querySelector<HTMLElement>('.bnav');
   if (nav) {
+    const bubble = nav.querySelector<HTMLElement>('.bnav-bubble');
     const setActive = (key: NavKey) => {
+      if (nav.dataset.active === key) return;
       nav.dataset.active = key;
+      // Replay the small stretch while the bubble slides.
+      bubble?.classList.remove('moving');
+      void bubble?.offsetWidth;
+      bubble?.classList.add('moving');
       nav.querySelectorAll<HTMLAnchorElement>('.bnav-item').forEach((a) => {
         const on = a.dataset.key === key;
         a.classList.toggle('on', on);
@@ -45,8 +51,29 @@ const items: { key: NavKey; label: string; href: string }[] = [
       });
     };
 
+    // Hide while scrolling down, show again on scroll up, at the top/end of the page, or on keyboard focus.
+    let lastY = window.scrollY;
+    let ignoreUntil = 0;
+    const show = () => nav.classList.remove('is-hidden');
+    window.addEventListener(
+      'scroll',
+      () => {
+        const y = window.scrollY;
+        const nearEdge = y < 80 || window.innerHeight + y >= document.documentElement.scrollHeight - 80;
+        if (nearEdge || y < lastY - 4 || performance.now() < ignoreUntil) show();
+        else if (y > lastY + 4) nav.classList.add('is-hidden');
+        if (Math.abs(y - lastY) > 4) lastY = y;
+      },
+      { passive: true },
+    );
+    nav.addEventListener('focusin', show);
+
     nav.querySelectorAll<HTMLAnchorElement>('.bnav-item').forEach((a) => {
-      a.addEventListener('click', () => setActive(a.dataset.key as NavKey));
+      a.addEventListener('click', () => {
+        // The tap scrolls the page down to its section; keep the nav in view meanwhile.
+        ignoreUntil = performance.now() + 1200;
+        setActive(a.dataset.key as NavKey);
+      });
     });
 
     // On Home the bubble also follows the section in view.

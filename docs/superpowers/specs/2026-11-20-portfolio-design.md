@@ -68,7 +68,10 @@ Dark by default; a toggle switches to light and is remembered. An inline head sc
 
 ### Motion
 - On load, the FAIGAO word and the photo rise once (about 0.9–1.1s).
-- The phone bottom-nav bubble slides between items.
+- The phone bottom-nav bubble slides between items (transform, with a small stretch and an icon cross-fade).
+- The phone bottom nav slides away while scrolling down and returns on scroll up, at the top and end of the page, and on keyboard focus.
+- A few big moments rise in as they scroll into view: section display titles, the four instrument words, the LET'S WORK TOGETHER titles and the project rows. Nothing else (see anti-goals). CSS scroll timelines only; browsers without them show the content as is.
+- Project demo clips play muted only while on screen.
 - View transitions between the project list and project pages.
 - Everything is off under `prefers-reduced-motion`.
 
@@ -165,3 +168,5 @@ Quality bar: Lighthouse 95+ on mobile; WCAG AA in both themes; visible focus; no
 - 2026-11-20: OJT-hours line removed.
 - 2026-11-21: Real client names allowed (clients agreed); results from known facts; testimonials from JV's report of what clients said, confirmed by clients.
 - 2026-11-21: Follower counts updated manually.
+- 2026-11-21: Real screenshots and short demo clips from JV's screen recordings, personal data blurred; the Projects page uses the first screenshot instead of wireframes. CV published with phone number (JV approved).
+- 2026-11-21: Scroll reveal limited to the elements listed under Motion; bottom nav hides on scroll down.

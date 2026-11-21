@@ -12,7 +12,8 @@ npx playwright install chromium   # once, for e2e tests and icon generation
 npm run dev                       # http://localhost:4321
 npm run build                     # production build
 npm test                          # unit tests (Vitest)
-npm run test:e2e                  # browser tests (Playwright, starts its own dev server)
+npm run test:e2e                  # browser tests (Playwright, starts its own dev server;
+                                  #   if one is already running: E2E_BASE_URL=http://localhost:4321)
 npm run check                     # type check
 ```
 
@@ -23,7 +24,7 @@ npm run check                     # type check
 | Facebook / TikTok follower counts (about once a month) | `src/data/social.json` (also bump `updatedAt`) |
 | Tech stack | `src/data/stack.json` (`icon` = a [Simple Icons](https://simpleicons.org) slug, optional) |
 | A project | `src/content/projects/<slug>.md` (frontmatter + "The problem" / "What I built") |
-| Project screenshots | put images in `src/assets/projects/<slug>/`, list them under `screenshots:` in the project file (the section stays hidden while the list is empty) |
+| Screenshots and demo clips | put the screen recordings in `website_Photos/` (not committed), set the times and blur boxes in `scripts/make-media.mjs`, run `node scripts/make-media.mjs` (needs ffmpeg), then list the screenshots under `screenshots:` in the project file. The first screenshot is the Projects page thumbnail. |
 | "How it works" diagram | `src/components/diagrams/index.ts` |
 | CV | `public/JV-Faigao-CV.pdf` (the Download CV buttons link here) |
 | Favicons and link preview card | run `node scripts/make-icons.mjs` after changing `public/logo.svg` or the photo |

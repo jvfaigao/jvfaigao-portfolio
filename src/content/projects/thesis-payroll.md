@@ -6,9 +6,11 @@ order: 7
 status: team
 role: Frontend developer, team project
 year: '2026'
-stack: [React, React Router, jsPDF, SheetJS]
+stack: [React, PostgreSQL]
 meta: Frontend
-thumb: thesis
+screenshots:
+  - src: ../../assets/projects/thesis-payroll/1.webp
+    alt: "University of Rizal System Payroll System sign-in page"
 diagram: thesis
 intro: "Our thesis: an attendance and payroll system for the University of Rizal System. I built the frontend."
 ---

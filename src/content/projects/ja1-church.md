@@ -6,7 +6,7 @@ order: 1
 status: production
 role: Solo developer
 year: '2026'
-stack: [React, Firebase, Vercel serverless functions, PWA]
+stack: [React, Firebase]
 meta: About 500 users
 liveUrl: https://ja1-attendance.web.app
 result:
@@ -15,7 +15,17 @@ result:
 quote:
   text: We can now keep track of who attends every Sunday and manage our members better. No more listing attendees by hand. One QR scan and their attendance is in.
   by: Admin, JA1 Church
-thumb: ja1
+screenshots:
+  - src: ../../assets/projects/ja1-church/1.webp
+    alt: "JA1 Church public website: upcoming Sunday services"
+  - src: ../../assets/projects/ja1-church/2.webp
+    alt: "Attendance scanner, ready for a member QR code"
+  - src: ../../assets/projects/ja1-church/3.webp
+    alt: "A member's Anointed Journey progress"
+demo:
+  width: 1432
+  height: 720
+  label: "Demo: browsing the JA1 Church public website"
 diagram: ja1
 intro: "Members, events, attendance and teams for JA1 Church, used across multiple church branches."
 ---
@@ -26,7 +36,8 @@ Attendance at every service was listed by hand, so leaders had no easy way to se
 
 ## What I built
 
-- QR attendance scanning on a handheld kiosk that keeps working offline.
+- Three ways to take attendance: QR scan, manual search, and a scanner device, with a kiosk display that keeps working offline.
 - Member records, accounts and teams for each branch.
 - Events and attendance reports for leaders.
 - A public website for each branch.
+- Four access roles, with the data secured by Firestore rules and App Check.

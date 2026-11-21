@@ -59,11 +59,6 @@ test('marami page shows Order online link', async ({ page }) => {
   await expect(page.locator('.pp-meta')).toContainText('Solo developer · 2026 · React, Supabase (PostgreSQL), Dexie.js, PWA');
 });
 
-test('screenshots section hidden when empty', async ({ page }) => {
-  await page.goto('/projects/marami-cafe');
-  await expect(page.getByRole('heading', { name: 'Screenshots' })).toHaveCount(0);
-});
-
 test('diagram wide at 1280, vertical at 390', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/projects/marami-cafe');

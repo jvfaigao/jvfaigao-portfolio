@@ -76,3 +76,25 @@ for (const path of ['/', '/projects']) {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 }
+
+test('selected elements rise in on scroll, and end fully visible', async ({ page }) => {
+  await page.goto('/');
+  for (const sel of ['#how h2', '#stack h2', '.inst span', '#contact h2']) {
+    await expect(page.locator(sel).first(), sel).toHaveCSS('animation-name', 'jvReveal');
+  }
+  await page.locator('#how h2').scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollBy({ top: 300, behavior: 'instant' }));
+  await expect.poll(() => page.locator('#how h2').evaluate((e) => getComputedStyle(e).opacity)).toBe('1');
+});
+
+test('reduced motion: no scroll reveal', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await expect(page.locator('#how h2')).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('#how h2')).toHaveCSS('opacity', '1');
+});
+
+test('project rows rise in on scroll', async ({ page }) => {
+  await page.goto('/projects');
+  await expect(page.locator('.row').first()).toHaveCSS('animation-name', 'jvReveal');
+});
