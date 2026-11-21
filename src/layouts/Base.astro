@@ -68,7 +68,7 @@ const ogUrl = new URL(ogImage, Astro.site);
         var SEL = [
           'main h1', 'main h2', 'main h3', 'main p', 'main li', 'main blockquote', 'main figcaption',
           '.quote-mark', '.step-num', '.cat-ico', '.inst span', '.social', '.btn-white-out', '#about .two > div:last-child > div > div',
-          '.row > *', '.cta-band .wrap > div', '.pp > a.tlink', '.result > *', '.demo', '.shot', '.pp .sec > div:last-child:not(.shots)',
+          '.row', '.cta-band .wrap > div', '.pp > a.tlink', '.result > *', '.demo', '.shot', '.pp .sec > div:last-child:not(.shots)',
         ].join(',');
         var SKIP = '#top, .cform, footer, .diag-wide, .diag-narrow, .social *';
         var items = [];
@@ -81,8 +81,8 @@ const ogUrl = new URL(ogImage, Astro.site);
           var n = 0;
           entries.forEach(function (e) {
             if (!e.isIntersecting) return;
-            // Things that enter together come in one after another.
-            e.target.style.transitionDelay = Math.min(n++, 8) * 80 + 'ms';
+            // Things that enter together come in one after another, kept short so the first screen is ready in about 0.6s.
+            e.target.style.transitionDelay = Math.min(n++, 5) * 40 + 'ms';
             e.target.classList.add('rv-in');
             io.unobserve(e.target);
           });

@@ -47,7 +47,8 @@ test('hero text rises in on load', async ({ page }) => {
 
 test('projects page and project pages reveal too', async ({ page }) => {
   await page.goto('/projects');
-  await expect(page.locator('.row > *').first()).toHaveClass(/rv-item/);
+  await expect(page.locator('.row').first()).toHaveClass(/rv-item/);
+  await expect(page.locator('.row > *').first()).not.toHaveClass(/rv-item/);
   await page.goto('/projects/marami-cafe');
   for (const sel of ['.pp-body h2', '.pp-body p', '.pp-body li', '.pp blockquote', '.shot']) {
     await expect(page.locator(sel).first(), sel).toHaveClass(/rv-item/);
@@ -81,4 +82,24 @@ test('if the reveal script breaks halfway, text still appears', async ({ page })
   await expect(page.locator('html')).toHaveClass(/\brv\b/);
   await expect(page.locator('html')).not.toHaveClass(/rv-ready/);
   await expect.poll(() => opacity(page, '#stack li'), { timeout: 5000 }).toBe('1');
+});
+
+test('first screen is quick: the first project is fully visible within ~0.7s', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/projects', { waitUntil: 'domcontentloaded' });
+  // Measured inside the page (no test-runner round trips): DOM ready until row 1 and all its parts are fully opaque.
+  const ms = await page.evaluate(
+    () =>
+      new Promise<number>((done) => {
+        const row = document.querySelector('.row')!;
+        const start = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming).domContentLoadedEventEnd;
+        const tick = () => {
+          const min = Math.min(...[row, ...row.children].map((e) => +getComputedStyle(e).opacity));
+          if (min >= 1) done(performance.now() - start);
+          else requestAnimationFrame(tick);
+        };
+        tick();
+      }),
+  );
+  expect(ms).toBeLessThan(800);
 });
