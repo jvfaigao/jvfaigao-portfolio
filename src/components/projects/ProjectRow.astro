@@ -1,6 +1,6 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from '../Icon.astro';
-import Thumb from './Thumb.astro';
 import StatusLabel from './StatusLabel.astro';
 import type { Project } from '../../lib/projects';
 
@@ -12,7 +12,7 @@ const { project } = Astro.props;
 const d = project.data;
 ---
 <div class="row">
-  <Thumb variant={d.thumb} />
+  <div class="th"><Image src={d.screenshots[0].src} alt={d.screenshots[0].alt} width={320} height={200} fit="cover" position="left top" /></div>
   <div>
     <a href={`/projects/${project.id}`} class="rname" style={`view-transition-name: p-${project.id}`}>{d.name}</a>
     <div class="rsum">{d.summary}</div>

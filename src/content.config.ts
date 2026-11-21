@@ -21,9 +21,10 @@ const projects = defineCollection({
       repoUrl: z.url().optional(),
       result: z.object({ headline: z.string(), line: z.string() }).optional(),
       quote: z.object({ text: z.string(), by: z.string() }).optional(),
-      // CSS wireframe thumbnail from the design canvas; swap for real images later.
-      thumb: z.enum(['ja1', 'marami', 'urban', 'degz', 'faceattend', 'ambagpay', 'thesis']),
-      screenshots: z.array(z.object({ src: image(), alt: z.string() })).default([]),
+      // The first screenshot doubles as the thumbnail on the Projects page. Made by scripts/make-media.mjs.
+      screenshots: z.array(z.object({ src: image(), alt: z.string() })).min(1),
+      // Short muted clip served from public/media/<slug>.mp4 (+ .webp poster).
+      demo: z.object({ width: z.number(), height: z.number(), label: z.string() }).optional(),
       diagram: z.enum(['ja1', 'marami', 'urban', 'degz', 'faceattend', 'ambagpay', 'thesis']),
     }),
 });

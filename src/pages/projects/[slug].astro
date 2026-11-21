@@ -60,14 +60,21 @@ const statusLine = { production: null, competition: `Champion · ${d.meta}`, hac
       <Diagram name={d.diagram} />
     </section>
 
-    {d.screenshots.length > 0 && (
-      <section class="sec" style="padding: 56px 0">
-        <h2 style="margin: 0 0 24px">Screenshots</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px">
-          {d.screenshots.map((s) => <div class="shot"><Image src={s.src} alt={s.alt} widths={[480, 960]} sizes="(max-width: 640px) 100vw, 400px" /></div>)}
-        </div>
-      </section>
-    )}
+    <section class="sec" style="padding: 56px 0">
+      <h2 style="margin: 0 0 24px">Screenshots</h2>
+      {d.demo && (
+        <video class="demo" muted loop playsinline controls preload="none" width={d.demo.width} height={d.demo.height} poster={`/media/${project.id}.webp`} aria-label={d.demo.label}>
+          <source src={`/media/${project.id}.mp4`} type="video/mp4" />
+        </video>
+      )}
+      <div class="shots">
+        {d.screenshots.map((s) => (
+          <a class:list={['shot', { portrait: s.src.height > s.src.width }]} href={s.src.src} aria-label={`${s.alt} (full size)`}>
+            <Image src={s.src} alt={s.alt} widths={[480, 960]} sizes="(max-width: 640px) 100vw, 400px" />
+          </a>
+        ))}
+      </div>
+    </section>
 
     <section class="sec" style="padding: 64px 0 88px">
       <p style="margin: 0 0 24px; font-size: 22px; font-weight: 500; max-width: 40ch">Interested in working together?</p>
@@ -81,3 +88,24 @@ const statusLine = { production: null, competition: `Champion · ${d.meta}`, hac
     </section>
   </main>
 </Base>
+
+<script>
+  // Play the demo only while it is on screen; never autoplay for reduced motion or after the visitor paused it.
+  const video = document.querySelector<HTMLVideoElement>('video.demo');
+  if (video && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let visible = false;
+    let pausedByVisitor = false;
+    video.addEventListener('pause', () => {
+      if (visible && document.visibilityState === 'visible') pausedByVisitor = true;
+    });
+    video.addEventListener('play', () => (pausedByVisitor = false));
+    new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible && !pausedByVisitor) video.play().catch(() => {});
+        else if (!visible) video.pause();
+      },
+      { threshold: 0.5 },
+    ).observe(video);
+  }
+</script>
