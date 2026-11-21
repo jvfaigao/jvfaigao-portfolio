@@ -147,7 +147,7 @@ html[data-theme='dark'] .ico-moon, html[data-theme='light'] .ico-sun { opacity: 
 /* Text reveal: the script at the end of Base.astro adds .rv to <html> and .rv-item to each piece of text,
    then .rv-in when it scrolls into view. Without JS or with reduced motion nothing is hidden. */
 .rv .rv-item { opacity: 0; translate: 0 28px; }
-.rv-armed .rv-item { transition: opacity .7s ease, translate .7s cubic-bezier(.2, .8, .2, 1); }
+.rv-armed .rv-item { transition: opacity .5s ease, translate .5s cubic-bezier(.2, .8, .2, 1); }
 .rv .rv-item.rv-in { opacity: 1; translate: 0 0; }
 /* Failsafe: if the script stopped before it finished (.rv-ready), show everything after 2.5s. */
 .rv:not(.rv-ready) .rv-item { animation: jvShow 0s 2.5s forwards; }
