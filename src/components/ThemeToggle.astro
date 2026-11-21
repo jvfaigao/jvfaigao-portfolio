@@ -19,8 +19,13 @@ import Icon from './Icon.astro';
   label(root.dataset.theme === 'light' ? 'light' : 'dark');
   btn?.addEventListener('click', () => {
     const next: Theme = root.dataset.theme === 'light' ? 'dark' : 'light';
-    root.dataset.theme = next;
-    label(next);
+    const apply = () => {
+      root.dataset.theme = next;
+      label(next);
+    };
+    // Cross-fade the whole page where supported; elsewhere (or with reduced motion) switch at once.
+    if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(apply);
+    else apply();
     storeTheme(next);
   });
 </script>

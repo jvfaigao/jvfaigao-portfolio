@@ -12,17 +12,24 @@ const byId = Object.fromEntries(d.nodes.map((n) => [n.id, n]));
 const width = Math.max(...d.nodes.map((n) => n.col)) * COL + W;
 const height = TOP + Math.max(...d.nodes.map((n) => n.row)) * ROW + H;
 
-// Each edge joins neighbouring cards; arrows point from `from` to `to`.
+// Draw-in order: a card's step is the longest chain of arrows leading to it, so the flow reveals in reading order.
+const depth: Record<string, number> = Object.fromEntries(d.nodes.map((n) => [n.id, 0]));
+for (let i = 0; i < d.nodes.length; i++) for (const [from, to] of d.edges) depth[to] = Math.max(depth[to], depth[from] + 1);
+
+// Each edge joins neighbouring cards; arrows point from `from` to `to`. `dir` is the way the arrow draws in.
 const arrows = d.edges.map(([fromId, toId]) => {
   const a = byId[fromId], b = byId[toId];
+  const step = depth[fromId] * 2 + 1;
   if (a.row === b.row) {
     const first = a.col < b.col ? a : b;
     const p = pos(first);
-    return { left: p.left + W, top: p.top + H / 2 - 4, w: COL - W - 1, h: 8, path: a.col < b.col ? 'M 0 4 L 108 4' : 'M 111 4 L 3 4' };
+    const right = a.col < b.col;
+    return { step, dir: right ? 'r' : 'l', left: p.left + W, top: p.top + H / 2 - 4, w: COL - W - 1, h: 8, path: right ? 'M 0 4 L 108 4' : 'M 111 4 L 3 4' };
   }
   const first = a.row < b.row ? a : b;
   const p = pos(first);
-  return { left: p.left + W / 2 - 4, top: p.top + H, w: 8, h: ROW - H - 1, path: a.row < b.row ? 'M 4 0 L 4 116' : 'M 4 119 L 4 3' };
+  const down = a.row < b.row;
+  return { step, dir: down ? 'd' : 'u', left: p.left + W / 2 - 4, top: p.top + H, w: 8, h: ROW - H - 1, path: down ? 'M 4 0 L 4 116' : 'M 4 119 L 4 3' };
 });
 const uid = Astro.props.name;
 ---
@@ -30,13 +37,13 @@ const uid = Astro.props.name;
   {d.narrow.map((step, i) => (
     <>
       {i > 0 && (
-        <div class="narrow-arrow" aria-hidden="true">
+        <div class="narrow-arrow" aria-hidden="true" style={`--d: ${i * 2 - 1}`}>
           <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v21M3 17l5 5 5-5"></path></svg>
         </div>
       )}
       <div class={step.length > 1 ? 'ngrid' : undefined}>
         {step.map((id) => (
-          <div class:list={['ncard', { hot: byId[id].hot }]}><b>{byId[id].title}</b><br /><span>{byId[id].sub}</span></div>
+          <div class:list={['ncard', { hot: byId[id].hot }]} style={`--d: ${i * 2}`}><b>{byId[id].title}</b><br /><span>{byId[id].sub}</span></div>
         ))}
       </div>
     </>
@@ -45,7 +52,7 @@ const uid = Astro.props.name;
 <div class="diag-wide" role="img" aria-label={d.label}>
   <div style={`position: relative; width: ${width}px; height: ${height}px`} aria-hidden="true">
     {arrows.map((a, i) => (
-      <svg class="warrow" width={a.w} height={a.h} viewBox={`0 0 ${a.w} ${a.h}`} preserveAspectRatio="none" style={`left: ${a.left}px; top: ${a.top}px; width: ${a.w}px; height: ${a.h}px`}>
+      <svg class={`warrow ${a.dir}`} width={a.w} height={a.h} viewBox={`0 0 ${a.w} ${a.h}`} preserveAspectRatio="none" style={`left: ${a.left}px; top: ${a.top}px; width: ${a.w}px; height: ${a.h}px; --d: ${a.step}`}>
         <defs>
           <marker id={`ah-${uid}-${i}`} orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible">
             <path d="M0 0 L4 2 L0 4 Z" style="stroke: none; fill: var(--muted)"></path>
@@ -55,10 +62,28 @@ const uid = Astro.props.name;
       </svg>
     ))}
     {d.nodes.map((n) => (
-      <div class:list={['wcard', { hot: n.hot }]} style={`left: ${pos(n).left}px; top: ${pos(n).top}px`}>
+      <div class:list={['wcard', { hot: n.hot }]} style={`left: ${pos(n).left}px; top: ${pos(n).top}px; --d: ${depth[n.id] * 2}`}>
         <span><b>{n.title}</b><br /><span>{n.sub}</span></span>
       </div>
     ))}
   </div>
 </div>
 <p style="margin: 20px 0 0; font-size: 15px; color: var(--muted); max-width: 70ch">{d.caption}</p>
+
+<script>
+  // Hide the diagram until it scrolls into view, then draw it in. Without JS or with reduced motion it simply shows.
+  if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLElement>('.diag-wide, .diag-narrow').forEach((el) => {
+      el.classList.add('pending');
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          el.classList.replace('pending', 'in');
+          io.disconnect();
+        },
+        { threshold: 0.3 },
+      );
+      io.observe(el);
+    });
+  }
+</script>

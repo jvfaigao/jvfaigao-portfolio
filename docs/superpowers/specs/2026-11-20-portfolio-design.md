@@ -72,6 +72,10 @@ Dark by default; a toggle switches to light and is remembered. An inline head sc
 - The phone bottom nav slides away while scrolling down and returns on scroll up, at the top and end of the page, and on keyboard focus.
 - A few big moments rise in as they scroll into view: section display titles, the four instrument words, the LET'S WORK TOGETHER titles and the project rows. Nothing else (see anti-goals). CSS scroll timelines only; browsers without them show the content as is.
 - Project demo clips play muted only while on screen.
+- "How it works" diagrams draw in once, in flow order (boxes rise, arrows extend), when they scroll into view.
+- Hover (desktop): project thumbnails zoom slightly; ↗ arrows nudge.
+- Contact form: spinner on the button while sending; a check mark on success.
+- Theme toggle: sun and moon spin and cross-fade; the page colours cross-fade where the View Transitions API exists.
 - View transitions between the project list and project pages.
 - Everything is off under `prefers-reduced-motion`.
 
