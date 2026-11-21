@@ -1,0 +1,82 @@
+<form class="cform" method="post" action="/api/contact" novalidate data-contact-form>
+  <div>
+    <label for="cname">Name</label>
+    <input id="cname" name="name" type="text" autocomplete="name" maxlength="80" class="field" aria-describedby="err-name" />
+    <div id="err-name" class="ferr" aria-live="polite"></div>
+  </div>
+  <div>
+    <label for="cemail">Email</label>
+    <input id="cemail" name="email" type="email" autocomplete="email" class="field" aria-describedby="err-email" />
+    <div id="err-email" class="ferr" aria-live="polite"></div>
+  </div>
+  <div>
+    <label for="cmsg">Message</label>
+    <textarea id="cmsg" name="message" rows="5" maxlength="2000" class="field" style="resize: vertical" aria-describedby="err-message"></textarea>
+    <div id="err-message" class="ferr" aria-live="polite"></div>
+  </div>
+  <div class="hp" aria-hidden="true">
+    <label for="cweb">Website</label>
+    <input id="cweb" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+    <button type="submit" class="btn-black">Send message</button>
+    <span role="status" class="form-status" style="font-size: 15px; font-weight: 500"></span>
+  </div>
+</form>
+
+<script>
+  import { CONTACT_EMAIL, validateContact, type ContactErrors } from '../lib/contact';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const fallback = `Couldn't send your message. Please email me at ${CONTACT_EMAIL}.`;
+
+    const showErrors = (errors: ContactErrors) => {
+      for (const field of ['name', 'email', 'message'] as const) {
+        const input = form.elements.namedItem(field) as HTMLInputElement;
+        const msg = errors[field] ?? '';
+        form.querySelector(`#err-${field}`)!.textContent = msg;
+        if (msg) input.setAttribute('aria-invalid', 'true');
+        else input.removeAttribute('aria-invalid');
+      }
+      const first = (['name', 'email', 'message'] as const).find((f) => errors[f]);
+      if (first) (form.elements.namedItem(first) as HTMLElement).focus();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = Object.fromEntries(new FormData(form));
+      const check = validateContact(input);
+      showErrors(check.ok ? {} : check.errors);
+      if (!check.ok && !check.spam) return;
+
+      status.textContent = 'Sending…';
+      button.disabled = true;
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(input),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok) {
+          form.reset();
+          status.textContent = "Message sent. I'll reply to your email soon.";
+        } else if (res.status === 400 && body.errors) {
+          showErrors(body.errors);
+          status.textContent = '';
+        } else if (res.status === 429) {
+          status.textContent = `Too many messages. Please wait a few minutes or email me at ${CONTACT_EMAIL}.`;
+        } else {
+          status.textContent = fallback;
+        }
+      } catch {
+        status.textContent = fallback;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>

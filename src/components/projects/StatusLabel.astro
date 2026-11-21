@@ -1,0 +1,19 @@
+---
+import type { Project } from '../../lib/projects';
+
+interface Props {
+  status: Project['data']['status'];
+  /** 'list' = projects page column; 'page' = next to a project page title. */
+  variant?: 'list' | 'page';
+}
+
+const { status, variant = 'list' } = Astro.props;
+const text = { production: 'In production', competition: 'Champion', hackathon: 'Hackathon', team: 'Team project' }[status];
+---
+{status === 'production' ? (
+  <div class="status"><span class="dot" aria-hidden="true"></span>{text}</div>
+) : status === 'competition' && variant === 'list' ? (
+  <span class="disp" style="font-size: 22px; line-height: 1; color: var(--red)">CHAMPION</span>
+) : (
+  <div class="status">{text}</div>
+)}

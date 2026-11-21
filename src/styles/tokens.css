@@ -1,0 +1,29 @@
+:root {
+  --red: #E3261C;
+  --font-disp: 'Big Shoulders Display', Impact, sans-serif;
+  --font-text: 'Schibsted Grotesk Variable', system-ui, sans-serif;
+}
+
+html[data-theme='dark'] {
+  --bg: #000000;
+  --surface: #0F0F0F;
+  --surface2: #1C1C1C;
+  --text: #FFFFFF;
+  --muted: #A3A3A3;
+  --line: #222222;
+  --redtext: #FF5A4F;
+  --navbg: #141414;
+  color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  --bg: #FFFFFF;
+  --surface: #F4F4F4;
+  --surface2: #E4E4E4;
+  --text: #000000;
+  --muted: #555555;
+  --line: #E2E2E2;
+  --redtext: #C81E15;
+  --navbg: #F3F3F3;
+  color-scheme: light;
+}

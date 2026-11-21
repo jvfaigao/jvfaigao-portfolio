@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import photo from '../../assets/jv-photo.webp';
+---
+<section id="top" class="wrap hero">
+  <div class="bigword" aria-hidden="true">
+    <svg viewBox="0 0 1000 345" preserveAspectRatio="xMidYMin meet">
+      <text x="0" y="336" textLength="1000" lengthAdjust="spacingAndGlyphs" font-size="417">FAIGAO</text>
+    </svg>
+  </div>
+
+  <div class="hero-intro">
+    <h1>Hi, I'm JV.</h1>
+    <p>Computer Engineering student who builds complete systems that real people use every day.</p>
+    <div class="hero-cta">
+      <a class="btn-red pill-red" href="/projects">View projects <Icon name="arrow" size={14} stroke={2.2} /></a>
+      <a class="ulink" href="#contact" style="font-size: 16px">Contact</a>
+    </div>
+  </div>
+
+  <div class="hero-photo">
+    <Image src={photo} alt="John Vincent Faigao" width={449} height={590} loading="eager" fetchpriority="high" />
+  </div>
+
+  <div class="hero-stats">
+    <div><div class="stat-num">4</div><div class="stat-label">systems in production</div></div>
+    <div><div class="stat-num">~500</div><div class="stat-label">users on the largest</div></div>
+    <div><div class="disp stat-champ">CHAMPION</div><div class="stat-label">CPEYESTA System Making 2026</div></div>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+---
+import { diagrams, type DiagramKey, type DiagramNode } from './index';
+
+interface Props {
+  name: DiagramKey;
+}
+
+const d = diagrams[Astro.props.name];
+const W = 184, H = 72, COL = 296, ROW = 192, TOP = 40;
+const pos = (n: DiagramNode) => ({ left: n.col * COL, top: TOP + n.row * ROW });
+const byId = Object.fromEntries(d.nodes.map((n) => [n.id, n]));
+const width = Math.max(...d.nodes.map((n) => n.col)) * COL + W;
+const height = TOP + Math.max(...d.nodes.map((n) => n.row)) * ROW + H;
+
+// Each edge joins neighbouring cards; arrows point from `from` to `to`.
+const arrows = d.edges.map(([fromId, toId]) => {
+  const a = byId[fromId], b = byId[toId];
+  if (a.row === b.row) {
+    const first = a.col < b.col ? a : b;
+    const p = pos(first);
+    return { left: p.left + W, top: p.top + H / 2 - 4, w: COL - W - 1, h: 8, path: a.col < b.col ? 'M 0 4 L 108 4' : 'M 111 4 L 3 4' };
+  }
+  const first = a.row < b.row ? a : b;
+  const p = pos(first);
+  return { left: p.left + W / 2 - 4, top: p.top + H, w: 8, h: ROW - H - 1, path: a.row < b.row ? 'M 4 0 L 4 116' : 'M 4 119 L 4 3' };
+});
+const uid = Astro.props.name;
+---
+<div class="diag-narrow" role="img" aria-label={d.label}>
+  {d.narrow.map((step, i) => (
+    <>
+      {i > 0 && (
+        <div class="narrow-arrow" aria-hidden="true">
+          <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v21M3 17l5 5 5-5"></path></svg>
+        </div>
+      )}
+      <div class={step.length > 1 ? 'ngrid' : undefined}>
+        {step.map((id) => (
+          <div class:list={['ncard', { hot: byId[id].hot }]}><b>{byId[id].title}</b><br /><span>{byId[id].sub}</span></div>
+        ))}
+      </div>
+    </>
+  ))}
+</div>
+<div class="diag-wide" role="img" aria-label={d.label}>
+  <div style={`position: relative; width: ${width}px; height: ${height}px`} aria-hidden="true">
+    {arrows.map((a, i) => (
+      <svg class="warrow" width={a.w} height={a.h} viewBox={`0 0 ${a.w} ${a.h}`} preserveAspectRatio="none" style={`left: ${a.left}px; top: ${a.top}px; width: ${a.w}px; height: ${a.h}px`}>
+        <defs>
+          <marker id={`ah-${uid}-${i}`} orient="auto" markerWidth="5" markerHeight="5" refX="2" refY="2" overflow="visible">
+            <path d="M0 0 L4 2 L0 4 Z" style="stroke: none; fill: var(--muted)"></path>
+          </marker>
+        </defs>
+        <path d={a.path} marker-end={`url(#ah-${uid}-${i})`}></path>
+      </svg>
+    ))}
+    {d.nodes.map((n) => (
+      <div class:list={['wcard', { hot: n.hot }]} style={`left: ${pos(n).left}px; top: ${pos(n).top}px`}>
+        <span><b>{n.title}</b><br /><span>{n.sub}</span></span>
+      </div>
+    ))}
+  </div>
+</div>
+<p style="margin: 20px 0 0; font-size: 15px; color: var(--muted); max-width: 70ch">{d.caption}</p>

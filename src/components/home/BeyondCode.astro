@@ -1,0 +1,29 @@
+---
+import social from '../../data/social.json';
+
+const cards = [
+  { net: 'Facebook', ...social.facebook },
+  { net: 'TikTok', ...social.tiktok },
+];
+---
+<section id="personal" class="sec">
+  <div class="wrap">
+    <h2 class="disp" style="margin: 0 0 20px; font-size: clamp(52px, 6vw, 84px); line-height: .9">BEYOND CODE</h2>
+    <p style="margin: 0 0 36px; font-size: 19px; max-width: 46ch">I'm also a musician. I play four instruments:</p>
+    <div class="inst disp" role="img" aria-label="Piano, drums, guitar and bass"><span>PIANO</span><span>DRUMS</span><span>GUITAR</span><span>BASS</span></div>
+    <div class="socials" style="margin-top: 64px">
+      {cards.map((c) => (
+        <a class="social" href={c.url}>
+          <span>
+            <span class="social-net">{c.net} ↗</span>
+            <span class="social-name">{c.name}</span>
+          </span>
+          <span style="text-align: right">
+            <span class="disp social-count">{c.followers}</span>
+            <span style="display: block; font-size: 14px; color: var(--muted)">followers</span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

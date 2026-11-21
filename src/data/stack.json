@@ -1,0 +1,44 @@
+[
+  {
+    "title": "Languages",
+    "icon": "code",
+    "items": [
+      { "label": "TypeScript", "icon": "typescript" },
+      { "label": "JavaScript", "icon": "javascript" },
+      { "label": "Python", "icon": "python" },
+      { "label": "PHP", "icon": "php" },
+      { "label": "C++", "icon": "cplusplus" },
+      { "label": "HTML and CSS", "icon": "html5" }
+    ]
+  },
+  {
+    "title": "Frontend",
+    "icon": "layout",
+    "items": [
+      { "label": "React", "icon": "react" },
+      { "label": "Vite", "icon": "vite" },
+      { "label": "Progressive web apps", "icon": "pwa" },
+      { "label": "Responsive, mobile-first UI" }
+    ]
+  },
+  {
+    "title": "Backend and data",
+    "icon": "database",
+    "items": [
+      { "label": "Firebase", "icon": "firebase" },
+      { "label": "Supabase and PostgreSQL", "icon": "supabase" },
+      { "label": "Vercel serverless functions", "icon": "vercel" },
+      { "label": "Dexie.js for offline-first" }
+    ]
+  },
+  {
+    "title": "Tools and hosting",
+    "icon": "cloud",
+    "items": [
+      { "label": "Git and GitHub", "icon": "git" },
+      { "label": "Vercel", "icon": "vercel" },
+      { "label": "Cloudflare Pages", "icon": "cloudflarepages" },
+      { "label": "VS Code" }
+    ]
+  }
+]
