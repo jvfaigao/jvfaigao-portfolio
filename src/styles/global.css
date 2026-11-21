@@ -144,17 +144,26 @@ html[data-theme='dark'] .ico-moon, html[data-theme='light'] .ico-sun { opacity: 
 .ferr:empty { display: none; }
 .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 
-/* Scroll reveal on a few big moments only (spec: no fade-in on every section). Browsers without scroll timelines just show them. */
+/* Scroll reveal: big titles plus each group of text rises in as it enters the screen (a group, never single lines).
+   Not the hero (it has its own load animation), the contact form or the footer. Browsers without scroll timelines just show them. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .h-disp, #about h2, #personal h2, .inst span, .contact h2, .row, .cta-band h2 {
+    .h-disp, #about h2, #personal h2, .inst span, .contact h2, .row, .cta-band h2,
+    .steps > div, #words figure, .stack > div,
+    #about .two > div:first-child > p, #about .two > div:last-child > div,
+    #personal .wrap > p, .social, .contact-grid > div:first-child > p, .contact-grid > div:first-child > a,
+    .result, .pp-body > *, .pp figure, .pp .sec > h2, .pp .sec > p, .demo, .shot {
       /* Longhands on purpose: the minifier folds a shorthand + view() into one rule Chrome rejects. */
       animation-name: jvReveal;
       animation-fill-mode: both;
       animation-timing-function: linear;
       animation-timeline: view();
-      animation-range: entry 0% entry 70%;
+      /* --n staggers items that enter together (grid columns). */
+      animation-range: entry calc(var(--n, 0) * 12%) entry calc(70% + var(--n, 0) * 12%);
     }
+    .steps > :nth-child(2), .stack > :nth-child(2), .socials > :nth-child(2), .shots > :nth-child(2) { --n: 1; }
+    .steps > :nth-child(3), .stack > :nth-child(3), .shots > :nth-child(3) { --n: 2; }
+    .steps > :nth-child(4), .stack > :nth-child(4), .shots > :nth-child(4) { --n: 3; }
   }
 }
 @keyframes jvReveal { from { opacity: 0; translate: 0 32px; } to { opacity: 1; translate: 0 0; } }
