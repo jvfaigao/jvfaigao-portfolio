@@ -78,3 +78,53 @@ test('bottom nav never covers footer', async ({ page }) => {
   const bubble = (await page.locator('.bnav-bubble').boundingBox())!;
   expect(footerLast.y + footerLast.height).toBeLessThanOrEqual(bubble.y);
 });
+
+test.describe('phone bottom nav motion', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+  const scrollTo = (page: import('@playwright/test').Page, top: number) =>
+    page.evaluate((t) => window.scrollTo({ top: t, behavior: 'instant' }), top);
+
+  test('hides on scroll down and comes back on scroll up', async ({ page }) => {
+    await page.goto('/');
+    const nav = page.locator('.bnav');
+    await scrollTo(page, 900);
+    await expect(nav).toHaveClass(/is-hidden/);
+    await expect.poll(async () => (await page.locator('.bnav-bubble').boundingBox())!.y).toBeGreaterThanOrEqual(844);
+    await scrollTo(page, 700);
+    await expect(nav).not.toHaveClass(/is-hidden/);
+  });
+
+  test('stays visible at the top and at the end of the page', async ({ page }) => {
+    await page.goto('/');
+    const nav = page.locator('.bnav');
+    await scrollTo(page, 900);
+    await expect(nav).toHaveClass(/is-hidden/);
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+    await expect(nav).not.toHaveClass(/is-hidden/);
+  });
+
+  test('tapping a nav item does not hide it while the page scrolls there', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('navigation', { name: 'Bottom' }).getByRole('link', { name: 'About' }).click();
+    await page.waitForTimeout(700);
+    await expect(page.locator('.bnav')).not.toHaveClass(/is-hidden/);
+  });
+
+  test('keyboard focus brings a hidden nav back', async ({ page }) => {
+    await page.goto('/');
+    await scrollTo(page, 900);
+    await expect(page.locator('.bnav')).toHaveClass(/is-hidden/);
+    await page.getByRole('navigation', { name: 'Bottom' }).getByRole('link', { name: 'Home' }).focus();
+    await expect(page.locator('.bnav')).not.toHaveClass(/is-hidden/);
+  });
+
+  test('bubble icon cross-fades to the active item', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('.bico-home')).toHaveCSS('opacity', '1');
+    await expect(page.locator('.bico-contact')).toHaveCSS('opacity', '0');
+    await page.getByRole('navigation', { name: 'Bottom' }).getByRole('link', { name: 'Contact' }).click();
+    await expect(page.locator('.bico-contact')).toHaveCSS('opacity', '1');
+    await expect(page.locator('.bico-home')).toHaveCSS('opacity', '0');
+    await expect(page.locator('.bnav-bubble')).toHaveCSS('transition-property', /transform/);
+  });
+});

@@ -17,7 +17,8 @@ interface Props {
 }
 
 const { title, description, navActive, ogImage = '/og.png', noindex = false } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// Built pages live in folders (/projects/), but every link uses /projects, so drop the trailing slash.
+const canonical = new URL(Astro.url.pathname.replace(/(.)\/$/, '$1'), Astro.site);
 const ogUrl = new URL(ogImage, Astro.site);
 ---
 <!doctype html>
