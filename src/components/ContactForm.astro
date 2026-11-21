@@ -52,8 +52,14 @@
       showErrors(check.ok ? {} : check.errors);
       if (!check.ok && !check.spam) return;
 
-      status.textContent = 'Sending…';
+      // data-state drives the check mark (sent) in CSS; aria-busy drives the button spinner.
+      const setStatus = (state: 'sending' | 'sent' | 'error' | '', text: string) => {
+        status.dataset.state = state;
+        status.textContent = text;
+      };
+      setStatus('sending', 'Sending…');
       button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
       try {
         const res = await fetch('/api/contact', {
           method: 'POST',
@@ -63,19 +69,20 @@
         const body = await res.json().catch(() => ({}));
         if (res.ok) {
           form.reset();
-          status.textContent = "Message sent. I'll reply to your email soon.";
+          setStatus('sent', "Message sent. I'll reply to your email soon.");
         } else if (res.status === 400 && body.errors) {
           showErrors(body.errors);
-          status.textContent = '';
+          setStatus('', '');
         } else if (res.status === 429) {
-          status.textContent = `Too many messages. Please wait a few minutes or email me at ${CONTACT_EMAIL}.`;
+          setStatus('error', `Too many messages. Please wait a few minutes or email me at ${CONTACT_EMAIL}.`);
         } else {
-          status.textContent = fallback;
+          setStatus('error', fallback);
         }
       } catch {
-        status.textContent = fallback;
+        setStatus('error', fallback);
       } finally {
         button.disabled = false;
+        button.removeAttribute('aria-busy');
       }
     });
   }
