@@ -77,3 +77,14 @@ for (const path of ['/', '/projects']) {
   });
 }
 
+
+test('home flows without divider lines (project pages keep theirs)', async ({ page }) => {
+  await page.goto('/');
+  for (const id of ['how', 'words', 'stack', 'about', 'personal']) {
+    await expect(page.locator(`#${id}`), id).toHaveCSS('border-top-width', '0px');
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('.hero-stats')).toHaveCSS('border-top-width', '0px');
+  await page.goto('/projects/marami-cafe');
+  await expect(page.locator('.pp .sec').nth(1)).toHaveCSS('border-top-width', '1px');
+});
