@@ -176,3 +176,5 @@ Quality bar: Lighthouse 95+ on mobile; WCAG AA in both themes; visible focus; no
 - 2026-11-21: Scroll reveal limited to the elements listed under Motion; bottom nav hides on scroll down.
 - 2026-11-21: JV asked for text to animate too: reveal extended to text groups (not every line), which narrows the "fade-in on every section" anti-goal to whole sections fading as one block.
 - 2026-11-21: The scroll-linked reveal showed no motion on JV's iPhone (Safari lacks scroll timelines). Replaced with a time-based reveal on all body text, at JV's request; the "fade-in on every section" anti-goal is dropped.
+- 2026-11-21: FaceAttend was built by a team of two (JV confirmed after the award photo showed two awardees): role is "Developer, team of 2". A Recognition section shows the ACCESS awarding photo and the scanned certificate; About links to it.
+- 2026-11-21: Home has no divider lines between its sections; it reads as one continuous page. Project pages keep theirs.

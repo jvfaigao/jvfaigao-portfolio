@@ -4,7 +4,7 @@ summary: Face-recognition attendance that rejects photos and videos of a face.
 group: other
 order: 5
 status: competition
-role: Solo developer
+role: Developer, team of 2
 year: '2026'
 stack: [React, Human (face recognition), MiniFAS (anti-spoofing), Vercel]
 meta: CPEYESTA 2026
@@ -19,6 +19,13 @@ screenshots:
     alt: "Setup: choosing who will use FaceAttend"
   - src: ../../assets/projects/faceattend/3.webp
     alt: "Settings: use case and liveness check"
+recognition:
+  - src: ../../assets/projects/faceattend/award.webp
+    alt: "The FaceAttend team receiving the System Making champion certificates at CPEYESTA 2026, with ACCESS officers and advisers"
+    caption: "System Making champion, CPEYESTA 2026, University of Rizal System – Antipolo. Photo: ACCESS."
+  - src: ../../assets/projects/faceattend/certificate.webp
+    alt: "Certificate of Achievement presented to John Vincent Faigao for System Making at CPEYESTA 2026, dated 27 October 2026"
+    caption: "Certificate of Achievement, System Making, 27 October 2026."
 demo:
   width: 1420
   height: 720
@@ -31,7 +38,7 @@ intro: "Face-recognition attendance for a classroom, built for the CPEYESTA Syst
 
 Face attendance is easy to fool: someone can hold up a photo or play a video of a classmate's face.
 
-## What I built
+## What we built
 
 - Face-based attendance and a daily time record that run fully in the browser, with no server and the AI models bundled so it works offline.
 - An anti-spoofing model (MiniFAS) that rejects photos and videos of a face, and asks for one random head or mouth movement only when it is unsure.

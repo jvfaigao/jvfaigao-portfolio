@@ -28,6 +28,8 @@ a { color: inherit; text-decoration: none; }
 .ext svg { display: inline-block; transition: translate .2s ease; }
 @media (hover: hover) { .ext:hover svg, .btn-red:hover svg { translate: 2px -2px; } }
 .sec { border-top: 1px solid var(--line); padding: 96px 0; }
+/* Home reads as one continuous page: no divider lines between its sections. */
+.home .sec { border-top: 0; }
 .h-disp { margin: 0 0 48px; font-size: clamp(52px, 6vw, 84px); line-height: .9; }
 
 /* Header */
@@ -167,7 +169,7 @@ html[data-theme='dark'] .ico-moon, html[data-theme='light'] .ico-sun { opacity: 
   .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 28px; padding-top: 8px; }
   .hero-photo { order: -1; margin-top: 13vw; justify-self: center; width: min(100%, 360px); }
   .hero-intro { padding-bottom: 0; }
-  .hero-stats { padding-bottom: 0; flex-direction: row; flex-wrap: wrap; justify-content: space-between; gap: 20px; text-align: left; border-top: 1px solid var(--line); padding-top: 24px; }
+  .hero-stats { padding-bottom: 0; flex-direction: row; flex-wrap: wrap; justify-content: space-between; gap: 20px; text-align: left; padding-top: 24px; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .two, .contact-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }

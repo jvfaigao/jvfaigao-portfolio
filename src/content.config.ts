@@ -23,6 +23,8 @@ const projects = defineCollection({
       quote: z.object({ text: z.string(), by: z.string() }).optional(),
       // The first screenshot doubles as the thumbnail on the Projects page. Made by scripts/make-media.mjs.
       screenshots: z.array(z.object({ src: image(), alt: z.string() })).min(1),
+      // Award photo, certificate and the like, shown in a "Recognition" section.
+      recognition: z.array(z.object({ src: image(), alt: z.string(), caption: z.string() })).optional(),
       // Short muted clip served from public/media/<slug>.mp4 (+ .webp poster).
       demo: z.object({ width: z.number(), height: z.number(), label: z.string() }).optional(),
       diagram: z.enum(['ja1', 'marami', 'urban', 'degz', 'faceattend', 'ambagpay', 'thesis']),

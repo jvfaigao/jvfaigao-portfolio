@@ -46,7 +46,7 @@ for (const p of PAGES) {
     await expect(page.locator('.result')).toHaveCount(p.result ? 1 : 0);
     await expect(page.locator('blockquote')).toHaveCount(p.quote ? 1 : 0);
     await expect(page.getByRole('heading', { name: 'How it works' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'What I built' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /What (I|we) built/ })).toBeVisible();
   });
 }
 

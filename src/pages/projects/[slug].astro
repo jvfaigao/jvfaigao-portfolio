@@ -41,6 +41,22 @@ const statusLine = { production: null, competition: `Champion · ${d.meta}`, hac
       )}
     </section>
 
+    {d.recognition && (
+      <section id="recognition" class="sec" style="border-top: 0; border-bottom: 1px solid var(--line); padding: 56px 0">
+        <h2 style="margin: 0 0 24px">Recognition</h2>
+        <div class="shots">
+          {d.recognition.map((r) => (
+            <figure style="margin: 0">
+              <a class="shot" href={r.src.src} aria-label={`${r.alt} (full size)`}>
+                <Image src={r.src} alt={r.alt} widths={[640, 1280]} sizes="(max-width: 640px) 100vw, 580px" />
+              </a>
+              <figcaption style="margin-top: 10px; font-size: 14px; color: var(--muted)">{r.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
     <section class="sec pp-body" style="border-top: 0; padding: 56px 0">
       <Content />
     </section>
