@@ -26,7 +26,7 @@ The home page is about JV as a person. Projects live on their own page. Claims s
 
 **Anti-goals**
 - Invented numbers, invented testimonials, or unverified claims.
-- Templated "AI" visuals: gradient blobs, glassmorphism, cursor followers, typing hero, skill bars, logo clouds, fade-in on every section.
+- Templated "AI" visuals: gradient blobs, glassmorphism, cursor followers, typing hero, skill bars, logo clouds.
 
 ## 3. Pages
 
@@ -70,7 +70,7 @@ Dark by default; a toggle switches to light and is remembered. An inline head sc
 - On load, the FAIGAO word and the photo rise once (about 0.9–1.1s).
 - The phone bottom-nav bubble slides between items (transform, with a small stretch and an icon cross-fade).
 - The phone bottom nav slides away while scrolling down and returns on scroll up, at the top and end of the page, and on keyboard focus.
-- Content rises in as it scrolls into view, one group of text at a time (a step, the quote, a tech stack column, an About block, a social card, a project text block, a screenshot), with a short stagger inside grids; plus the display titles, instrument words, LET'S WORK TOGETHER titles and project rows. Never single lines, and not the hero, the contact form or the footer. CSS scroll timelines only; browsers without them show the content as is.
+- Every heading, paragraph, bullet and card in the page body rises in (about 0.7s) when it scrolls into view, one after another when several enter together. The hero text rises in on load after FAIGAO and the photo. Not the contact form or the footer. Works in every browser (IntersectionObserver, Safari included); without JavaScript or with reduced motion the text simply shows, and if the script stops halfway everything shows after 2.5s.
 - Project demo clips play muted only while on screen.
 - "How it works" diagrams draw in once, in flow order (boxes rise, arrows extend), when they scroll into view.
 - Hover (desktop): project thumbnails zoom slightly; ↗ arrows nudge.
@@ -175,3 +175,4 @@ Quality bar: Lighthouse 95+ on mobile; WCAG AA in both themes; visible focus; no
 - 2026-11-21: Real screenshots and short demo clips from JV's screen recordings, personal data blurred; the Projects page uses the first screenshot instead of wireframes. CV published with phone number (JV approved).
 - 2026-11-21: Scroll reveal limited to the elements listed under Motion; bottom nav hides on scroll down.
 - 2026-11-21: JV asked for text to animate too: reveal extended to text groups (not every line), which narrows the "fade-in on every section" anti-goal to whole sections fading as one block.
+- 2026-11-21: The scroll-linked reveal showed no motion on JV's iPhone (Safari lacks scroll timelines). Replaced with a time-based reveal on all body text, at JV's request; the "fade-in on every section" anti-goal is dropped.
